@@ -124,7 +124,7 @@ class GameLoop()
     {
         Console.SetWindowSize(120, 30);
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.Write("Welcome to Jesper's Dungeon Crawler!\nPlease enter your name (max 8 characters): ");
+        Console.Write("Welcome to Jesper & Robin's Dungeon Crawler!\nPlease enter your name (max 8 characters): ");
 
         LevelData.Load("Levels\\Level1.txt");
 
