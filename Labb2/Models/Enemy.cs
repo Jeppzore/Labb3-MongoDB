@@ -1,4 +1,4 @@
-﻿namespace Labb2.Models;
+﻿namespace Labb3_MongoDB.Models;
 
 public abstract class Enemy : LevelElement
 {
@@ -31,6 +31,10 @@ public abstract class Enemy : LevelElement
         }
         else
         {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(0, 3);
+            Console.WriteLine($"{player.Name} blocked the attack from {Name}! {player.Name} health: {player.Health}".PadRight(Console.BufferWidth));
+            Console.ResetColor();
             return;
         }
 

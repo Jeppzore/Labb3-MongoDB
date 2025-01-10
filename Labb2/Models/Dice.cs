@@ -1,4 +1,4 @@
-﻿namespace Labb2.Models;
+﻿namespace Labb3_MongoDB.Models;
 
 public class Dice(int numberOfDice, int sidesPerDice, int modifier)
 {

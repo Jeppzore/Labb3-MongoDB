@@ -1,6 +1,6 @@
-﻿using Labb2.Models;
+﻿using Labb3_MongoDB.Models;
 
-namespace Labb2;
+namespace Labb3_MongoDB;
 
 public static class GameLoopHelper
 {
@@ -35,7 +35,7 @@ public static class GameLoopHelper
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
-
+        
             Console.WriteLine("Y O U  W I N!");
             Thread.Sleep(2000);
 

@@ -1,5 +1,5 @@
-﻿using Labb2;
-using Labb2.Models;
+﻿using Labb3_MongoDB;
+using Labb3_MongoDB.Models;
 
 class GameLoop()
 {
@@ -134,6 +134,7 @@ class GameLoop()
 
         Console.ResetColor(); Console.Clear();
         Console.CursorVisible = false;
+        _numberOfTurns = 0;
     }
 
     private void CreatePlayer()
