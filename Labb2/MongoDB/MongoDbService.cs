@@ -7,7 +7,7 @@ using MongoDB.Driver;
 
 namespace Labb3_MongoDB.MongoDB
 {
-    internal class MongoDbService
+    public class MongoDbService
     {
         private readonly IMongoCollection<Players> ?_players;      
 
@@ -18,7 +18,12 @@ namespace Labb3_MongoDB.MongoDB
             _players = database.GetCollection<Players>("Players");
         }
 
-        public async Task SavePlayersAsync(Players players)
+        public MongoDbService(IMongoDatabase database)
+        {
+            _players = database.GetCollection<Players>("Players");
+        }
+
+        public async Task SavePlayers(Players players)
         {
             // Update if current player exists, otherwise insert
             await _players.ReplaceOneAsync(
@@ -27,9 +32,14 @@ namespace Labb3_MongoDB.MongoDB
                 new ReplaceOptions { IsUpsert = true });
         }
 
-        public async Task<Players> LoadPlayersAsync(string playersId)
+        public async Task<Players> LoadPlayers(string playersId)
         {
             return await _players.Find(p => p.Id == playersId).FirstOrDefaultAsync();
+        }
+
+        public async Task DeletePlayers(string playersId)
+        {
+            await _players.DeleteOneAsync(players => players.Id == playersId);
         }
     }
 }
