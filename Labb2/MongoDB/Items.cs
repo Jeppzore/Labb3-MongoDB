@@ -8,6 +8,6 @@ namespace Labb3_MongoDB.MongoDB
 {
     public class Items
     {
-        public string HealthPotion { get; set; }
+        public string ?HealthPotion { get; set; }
     }
 }

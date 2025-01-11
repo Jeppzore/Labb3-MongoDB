@@ -1,16 +1,54 @@
 ﻿using Labb3_MongoDB;
 using Labb3_MongoDB.Models;
+using Labb3_MongoDB.MongoDB;
+using MongoDB.Driver;
+using System.Threading.Tasks;
 
 class GameLoop()
 {
     private Player? _player;
+    private Players? _players;
     private int _numberOfTurns = 0;
     private int _totalEnemies = 0;
     private List<Enemy> _deadEnemies = new();
 
+    public async Task SaveGame()
+    {
+        if (_player == null)
+        {
+            return;
+        }
+
+        var mongoDbService = new MongoDbService();
+        var gameManager = new GameManager(mongoDbService);
+
+        var newPlayer = new Players
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = _player!.Name,
+            Health = _player.Health,
+            MaxHealth = _player.MaxHealth,
+            Level = _player.Level,
+            Experience = _player.Experience,
+            VisionRange = _player.VisionRange,
+            AttackPower = _player.AttackPower,
+            DefenseStrength = _player.DefenseStrength,
+            CurrentLocation = _player.Position,
+            LastSaveTime = DateTime.UtcNow
+        };
+
+        await gameManager.SaveProgress(newPlayer);
+
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.SetCursorPosition(70, 15);
+        Console.WriteLine($"Successfully saved game at turn: {_numberOfTurns}".PadRight(Console.BufferWidth));
+        Console.ResetColor();
+    }
+
     public void Start()
     {
-        Setup();
+        _ = Setup();
 
         GameLoopHelper.DisplayControls();
 
@@ -107,6 +145,10 @@ class GameLoop()
                 Console.Clear();
                 Start();
                 break;
+
+            case ConsoleKey.Enter: // ENTER
+                SaveGame();
+                break;
         }
     }
 
@@ -120,8 +162,11 @@ class GameLoop()
         Start();
     }
 
-    private void Setup()
+    private async Task Setup()
     {
+        var mongoDbService = new MongoDbService();
+        var gameManager = new GameManager(mongoDbService);
+
         Console.SetWindowSize(120, 30);
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write("Welcome to Jesper & Robin's Dungeon Crawler!\nPlease enter your name (max 8 characters): ");
@@ -135,6 +180,28 @@ class GameLoop()
         Console.ResetColor(); Console.Clear();
         Console.CursorVisible = false;
         _numberOfTurns = 0;
+
+
+        /* TODO: See if an if-null check is viable to only create
+           a new instance of Players if it doesn't already exists. */
+
+        var newPlayer = new Players
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = _player!.Name,
+            Health = _player.Health,
+            MaxHealth = _player.MaxHealth,
+            Level = _player.Level,
+            Experience = _player.Experience,
+            VisionRange = _player.VisionRange,
+            AttackPower = _player.AttackPower,
+            DefenseStrength = _player.DefenseStrength,
+            CurrentLocation = _player.Position,
+            LastSaveTime = DateTime.UtcNow
+        };
+
+        // Waits for the Player to get saved to MongoDB before continuing
+        await gameManager.SaveProgress(newPlayer);
     }
 
     private void CreatePlayer()
@@ -147,6 +214,7 @@ class GameLoop()
         }
 
         _player = (Player)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Player)!;
-        _player.SetName(name);
+        _player.SetName(name);       
     }
+
 }

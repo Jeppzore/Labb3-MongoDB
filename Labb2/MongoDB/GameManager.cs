@@ -24,9 +24,12 @@ namespace Labb3_MongoDB.MongoDB
             await _mongoDbService!.SavePlayers(players);
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.SetCursorPosition(0, 27);
-            Console.WriteLine($"Game progress saved!".PadRight(Console.BufferWidth));
+            Console.WriteLine($"Game progress saved!...".PadRight(Console.BufferWidth));
             Console.ResetColor();
-            levelElement!.Clear();
+
+            await Task.Delay(3000);
+            Console.SetCursorPosition(0, 27);
+            Console.WriteLine(" ".PadRight(Console.BufferWidth));
         }
 
         public async Task<Players> LoadProgress(string playersId)
@@ -38,7 +41,9 @@ namespace Labb3_MongoDB.MongoDB
                 Console.SetCursorPosition(0, 27);
                 Console.WriteLine($"Player progress loaded!".PadRight(Console.BufferWidth));
                 Console.ResetColor();
-                levelElement!.Clear();
+
+                Console.SetCursorPosition(0, 27);
+                Console.WriteLine(" ".PadRight(Console.BufferWidth));
             }
             return players!;
         }

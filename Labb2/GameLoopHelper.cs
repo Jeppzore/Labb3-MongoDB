@@ -26,6 +26,9 @@ public static class GameLoopHelper
         Console.SetCursorPosition(70, 13);
         Console.WriteLine("Esc: Restart game");
 
+        Console.SetCursorPosition(70, 14);
+        Console.WriteLine("ENTER: Save game");
+
         Console.ResetColor();
     }
 
