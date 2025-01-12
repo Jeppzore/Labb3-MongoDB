@@ -7,22 +7,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Labb3_MongoDB.MongoDB
+namespace Labb3_MongoDB.MongoDB.Entities
 {
-    public class Players
+    [BsonIgnoreExtraElements]
+    public class Player
     {
         [BsonId]
         [BsonRepresentation(BsonType.String)] // Stores Guid as a string in MongoDB
-        public string ?Id { get; set; }
+        public string? Id { get; set; }
         public int Health { get; set; }
         public int MaxHealth { get; set; }
-        public string ?Name { get; set; }
+        public string? Name { get; set; }
         public int Level { get; set; }
         public int Experience { get; set; }
         public int VisionRange { get; set; }
         public int AttackPower { get; set; }
         public int DefenseStrength { get; set; }
-        public Position ?CurrentLocation { get; set; }
+        public Position? CurrentLocation { get; set; }
         public DateTime LastSaveTime { get; set; }
 
     }

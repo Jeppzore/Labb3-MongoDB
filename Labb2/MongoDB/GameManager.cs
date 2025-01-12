@@ -1,12 +1,13 @@
 ﻿using Elasticsearch.Net.Specification.AsyncSearchApi;
 using Labb3_MongoDB.Models;
+using Labb3_MongoDB.MongoDB.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Labb3_MongoDB.MongoDB
+namespace Labb3_MongoDB.MongoDB.Entities
 {
 
     public class GameManager
@@ -19,9 +20,9 @@ namespace Labb3_MongoDB.MongoDB
             _mongoDbService = mongoDbService;
         }
 
-        public async Task SaveProgress(Players players)
+        public async Task SaveProgress(Player player)
         {
-            await _mongoDbService!.SavePlayers(players);
+            await _mongoDbService!.SavePlayer(player);
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.SetCursorPosition(0, 27);
             Console.WriteLine($"Game progress saved!...".PadRight(Console.BufferWidth));
@@ -32,10 +33,10 @@ namespace Labb3_MongoDB.MongoDB
             Console.WriteLine(" ".PadRight(Console.BufferWidth));
         }
 
-        public async Task<Players> LoadProgress(string playersId)
+        public async Task<Player> LoadProgress(string playerId)
         {
-            var players = await _mongoDbService!.LoadPlayers(playersId);
-            if (players != null)
+            var player = await _mongoDbService!.LoadPlayer(playerId);
+            if (player != null)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.SetCursorPosition(0, 27);
@@ -45,7 +46,7 @@ namespace Labb3_MongoDB.MongoDB
                 Console.SetCursorPosition(0, 27);
                 Console.WriteLine(" ".PadRight(Console.BufferWidth));
             }
-            return players!;
+            return player!;
         }
     }
 }

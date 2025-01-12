@@ -1,13 +1,14 @@
 ﻿using Labb3_MongoDB;
 using Labb3_MongoDB.Models;
 using Labb3_MongoDB.MongoDB;
+using Labb3_MongoDB.MongoDB.Entities;
 using MongoDB.Driver;
 using System.Threading.Tasks;
 
 class GameLoop()
 {
-    private Player? _player;
-    private Players? _players;
+    private Labb3_MongoDB.Models.Player? _player;
+    private Labb3_MongoDB.MongoDB.Entities.Player? _players;
     private int _numberOfTurns = 0;
     private int _totalEnemies = 0;
     private List<Enemy> _deadEnemies = new();
@@ -22,7 +23,7 @@ class GameLoop()
         var mongoDbService = new MongoDbService();
         var gameManager = new GameManager(mongoDbService);
 
-        var newPlayer = new Players
+        var newPlayer = new Labb3_MongoDB.MongoDB.Entities.Player
         {
             Id = Guid.NewGuid().ToString(),
             Name = _player!.Name,
@@ -185,7 +186,7 @@ class GameLoop()
         /* TODO: See if an if-null check is viable to only create
            a new instance of Players if it doesn't already exists. */
 
-        var newPlayer = new Players
+        var newPlayer = new Labb3_MongoDB.MongoDB.Entities.Player
         {
             Id = Guid.NewGuid().ToString(),
             Name = _player!.Name,
@@ -213,7 +214,7 @@ class GameLoop()
             Start();
         }
 
-        _player = (Player)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Player)!;
+        _player = (Labb3_MongoDB.Models.Player)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Player)!;
         _player.SetName(name);       
     }
 

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Labb3_MongoDB.MongoDB
+namespace Labb3_MongoDB.MongoDB.Entities
 {
-    public class Rats
+    public class Snake
     {
         public Guid Id { get; set; }
         public int Health { get; set; }
