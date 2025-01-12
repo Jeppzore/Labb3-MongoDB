@@ -42,9 +42,18 @@ namespace Labb3_MongoDB.MongoDB
             }
         }
 
+        // Can be used to check for a specific playerId for multiple players
         public async Task<Player> LoadPlayer(string playerId)
         {
             return await _player.Find(p => p.Id == playerId).FirstOrDefaultAsync();
+        }
+
+
+        // added recently
+        public async Task<Player> GetExistingPlayer()
+        {
+            // Assumes only one player can exist
+            return await _player.Find(_ => true).FirstOrDefaultAsync();
         }
 
         public async Task DeletePlayer(string playerId)

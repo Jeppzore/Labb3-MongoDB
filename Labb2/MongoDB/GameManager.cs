@@ -28,7 +28,7 @@ namespace Labb3_MongoDB.MongoDB.Entities
             Console.WriteLine($"Game progress saved!...".PadRight(Console.BufferWidth));
             Console.ResetColor();
 
-            await Task.Delay(3000);
+            await Task.Delay(1500);
             Console.SetCursorPosition(0, 27);
             Console.WriteLine(" ".PadRight(Console.BufferWidth));
         }
@@ -47,6 +47,27 @@ namespace Labb3_MongoDB.MongoDB.Entities
                 Console.WriteLine(" ".PadRight(Console.BufferWidth));
             }
             return player!;
+        }
+
+        // added recently
+        public void LoadPlayerData(Player player)
+        {
+            player = new Player
+            {
+                Name = player.Name,
+                Health = player.Health,
+                MaxHealth = player.MaxHealth,
+                Level = player.Level,
+                Experience = player.Experience,
+                VisionRange = player.VisionRange,
+                AttackPower = player.AttackPower,
+                DefenseStrength = player.DefenseStrength,
+                CurrentLocation = player.CurrentLocation // Map position
+            };
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"Loaded player '{player.Name}' at position {player.CurrentLocation}.");
+            Console.ResetColor();
         }
     }
 }
