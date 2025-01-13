@@ -144,29 +144,31 @@ class GameLoop()
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write("Welcome to Jesper & Robin's Dungeon Crawler!\n");
 
+        LevelData.Load("Levels\\Level1.txt");
+
         var existingPlayer = mongoDbService.GetExistingPlayer();
 
         if(existingPlayer != null)
         {
             Console.WriteLine("Existing player found. Loading...");
             gameManager.LoadPlayerData(existingPlayer);
+            CreateExistingPlayer(existingPlayer);
         }
         else
         {
             Console.Write("Please enter your name (max 8 characters): ");
-            LevelData.Load("Levels\\Level1.txt");
-
-            CreatePlayer();
-            _totalEnemies = LevelData.Elements.OfType<Enemy>().ToList().Count;
-            _deadEnemies = new();
-
-            Console.ResetColor(); Console.Clear();
-            Console.CursorVisible = false;
-            _numberOfTurns = 0;           
+            CreateNewPlayer();
         }
+
+        _totalEnemies = LevelData.Elements.OfType<Enemy>().ToList().Count;
+        _deadEnemies = new();
+
+        Console.ResetColor(); Console.Clear();
+        Console.CursorVisible = false;
+        _numberOfTurns = 0;           
     }
 
-    private void CreatePlayer()
+    private void CreateNewPlayer()
     {
         var name = Console.ReadLine()!;
         if (name.Length <= 0 || name.Length > 8)
@@ -177,6 +179,12 @@ class GameLoop()
 
         _player = (Labb3_MongoDB.Models.Player)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Player)!;
         _player.SetName(name);
+    }
+
+    private void CreateExistingPlayer(Labb3_MongoDB.MongoDB.Entities.Player existingPlayer)
+    {
+        _player = (Labb3_MongoDB.Models.Player)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Player)!;
+        _player.SetName(existingPlayer.Name!);
     }
 
     public void SaveAndExit()
