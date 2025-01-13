@@ -1,8 +1,10 @@
-﻿using Labb3_MongoDB;
+﻿using Elasticsearch.Net;
+using Labb3_MongoDB;
 using Labb3_MongoDB.Models;
 using Labb3_MongoDB.MongoDB;
 using Labb3_MongoDB.MongoDB.Entities;
 using MongoDB.Driver;
+using System.Diagnostics;
 
 class GameLoop()
 {
@@ -118,7 +120,7 @@ class GameLoop()
                 break;
 
             case ConsoleKey.Enter: // ENTER
-                SaveGame();
+                SaveAndExit();
                 break;
         }
     }
@@ -133,26 +135,35 @@ class GameLoop()
         Start();
     }
 
-    private async Task Setup()
+    private void Setup()
     {
-        Console.SetWindowSize(120, 30);
+        var mongoDbService = new MongoDbService();
+        var gameManager = new GameManager(mongoDbService);
+
+        Console.SetWindowSize(120, 35);
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.Write("Welcome to Jesper & Robin's Dungeon Crawler!\nPlease enter your name (max 8 characters): ");
+        Console.Write("Welcome to Jesper & Robin's Dungeon Crawler!\n");
 
-        // TODO: For a more refactored version -
-        // consider making a new method "LoadPlayer" to call instead
+        var existingPlayer = mongoDbService.GetExistingPlayer();
 
-        LevelData.Load("Levels\\Level1.txt");
+        if(existingPlayer != null)
+        {
+            Console.WriteLine("Existing player found. Loading...");
+            gameManager.LoadPlayerData(existingPlayer);
+        }
+        else
+        {
+            Console.Write("Please enter your name (max 8 characters): ");
+            LevelData.Load("Levels\\Level1.txt");
 
-        CreatePlayer();
-        _totalEnemies = LevelData.Elements.OfType<Enemy>().ToList().Count;
-        _deadEnemies = new();
+            CreatePlayer();
+            _totalEnemies = LevelData.Elements.OfType<Enemy>().ToList().Count;
+            _deadEnemies = new();
 
-        Console.ResetColor(); Console.Clear();
-        Console.CursorVisible = false;
-        _numberOfTurns = 0;
-
-        await SaveGame();
+            Console.ResetColor(); Console.Clear();
+            Console.CursorVisible = false;
+            _numberOfTurns = 0;           
+        }
     }
 
     private void CreatePlayer()
@@ -168,10 +179,10 @@ class GameLoop()
         _player.SetName(name);
     }
 
-    public async Task SaveGame()
+    public void SaveAndExit()
     {
 
-        // If there is no active saved game - create a new one in MongoDB
+        // If there is no existing saved game - create a new one in MongoDB
         if (_players == null)
         {
 
@@ -193,34 +204,25 @@ class GameLoop()
                 LastSaveTime = DateTime.UtcNow
             };
 
-            await gameManager.SaveProgress(currentPlayer);
+            gameManager.SaveProgress(currentPlayer);
             _players = currentPlayer;
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.SetCursorPosition(70, 15);
-            Console.WriteLine($"Successfully saved game!".PadRight(Console.BufferWidth));
-            Console.ResetColor();
-
-            await RemoveSaveText();
-
+            SaveGameText();
 
         }
         else if (_players != null)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.SetCursorPosition(70, 15);
-            Console.WriteLine($"Saved Game".PadRight(Console.BufferWidth));
-            Console.ResetColor();
 
-            await RemoveSaveText();
+            SaveGameText();
         }
+        Environment.Exit(0);
     }
 
-    private static async Task RemoveSaveText()
+    public void SaveGameText()
     {
-        await Task.Delay(1500);
-        Console.SetCursorPosition(70, 15);
-        Console.WriteLine(" ".PadRight(Console.BufferWidth));
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.SetCursorPosition(0, 28);
+        Console.WriteLine($"Successfully saved game at turn: {_numberOfTurns}".PadRight(Console.BufferWidth));
         Console.ResetColor();
     }
 }

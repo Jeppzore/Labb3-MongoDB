@@ -20,17 +20,13 @@ namespace Labb3_MongoDB.MongoDB.Entities
             _mongoDbService = mongoDbService;
         }
 
-        public async Task SaveProgress(Player player)
+        public void SaveProgress(Player player)
         {
-            await _mongoDbService!.SavePlayer(player);
+            _mongoDbService!.SavePlayer(player);
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.SetCursorPosition(0, 27);
-            Console.WriteLine($"Game progress saved!...".PadRight(Console.BufferWidth));
+            Console.WriteLine($"Saving game...".PadRight(Console.BufferWidth));
             Console.ResetColor();
-
-            await Task.Delay(1500);
-            Console.SetCursorPosition(0, 27);
-            Console.WriteLine(" ".PadRight(Console.BufferWidth));
         }
 
         public async Task<Player> LoadProgress(string playerId)
@@ -54,6 +50,7 @@ namespace Labb3_MongoDB.MongoDB.Entities
         {
             player = new Player
             {
+                Id = player.Id,
                 Name = player.Name,
                 Health = player.Health,
                 MaxHealth = player.MaxHealth,
@@ -66,7 +63,7 @@ namespace Labb3_MongoDB.MongoDB.Entities
             };
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Loaded player '{player.Name}' at position {player.CurrentLocation}.");
+            Console.WriteLine($"Loaded player '{player.Name}'.");
             Console.ResetColor();
         }
     }

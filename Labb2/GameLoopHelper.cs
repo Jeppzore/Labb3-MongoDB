@@ -24,10 +24,10 @@ public static class GameLoopHelper
         Console.WriteLine("D: Right");
 
         Console.SetCursorPosition(70, 13);
-        Console.WriteLine("Esc: Restart game");
+        Console.WriteLine("ESC: Restart game without saving");
 
         Console.SetCursorPosition(70, 14);
-        Console.WriteLine("ENTER: Save game");
+        Console.WriteLine("ENTER: Save & Exit");
 
         Console.ResetColor();
     }
