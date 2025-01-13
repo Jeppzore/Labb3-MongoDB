@@ -154,11 +154,14 @@ class GameLoop()
             Thread.Sleep(1000);
             gameManager.LoadPlayerData(existingPlayer);
             CreateExistingPlayer(existingPlayer);
+            _numberOfTurns = existingPlayer.Turns;
         }
         else
         {
             Console.Write("Please enter your name (max 8 characters): ");
             CreateNewPlayer();
+            _player!.Turns = 0;
+            _numberOfTurns = 0;
         }
 
         _totalEnemies = LevelData.Elements.OfType<Enemy>().ToList().Count;
@@ -166,7 +169,6 @@ class GameLoop()
 
         Console.ResetColor(); Console.Clear();
         Console.CursorVisible = false;
-        _numberOfTurns = 0;           
     }
 
     private void CreateNewPlayer()
@@ -193,6 +195,7 @@ class GameLoop()
         _player.VisionRange = existingPlayer.VisionRange;
         _player.AttackPower = existingPlayer.AttackPower;
         _player.DefenseStrength = existingPlayer.DefenseStrength;
+        _player.Turns = existingPlayer.Turns;
         _player.Position = (Position)existingPlayer.CurrentLocation!;
     }
 
@@ -202,7 +205,6 @@ class GameLoop()
         // If there is no existing saved game - create a new one in MongoDB
         if (_players == null)
         {
-
             var mongoDbService = new MongoDbService();
             var gameManager = new GameManager(mongoDbService);
 
@@ -217,6 +219,7 @@ class GameLoop()
                 VisionRange = _player.VisionRange,
                 AttackPower = _player.AttackPower,
                 DefenseStrength = _player.DefenseStrength,
+                Turns = _numberOfTurns,
                 CurrentLocation = _player.Position,
                 LastSaveTime = DateTime.UtcNow
             };
@@ -229,7 +232,6 @@ class GameLoop()
         }
         else if (_players != null)
         {
-
             SaveGameText();
         }
         Environment.Exit(0);

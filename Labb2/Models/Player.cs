@@ -22,6 +22,8 @@ public class Player : LevelElement
 
     public int DefenseStrength { get; set; } = 0;
 
+    public int Turns { get; set; } = 0;
+
     public Player(Position position) : 
         base(position, '@', ConsoleColor.Yellow, ElementType.Player)
     {

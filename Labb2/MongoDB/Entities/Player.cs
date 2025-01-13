@@ -23,6 +23,7 @@ namespace Labb3_MongoDB.MongoDB.Entities
         public int VisionRange { get; set; }
         public int AttackPower { get; set; }
         public int DefenseStrength { get; set; }
+        public int Turns { get; set; }
         public Position? CurrentLocation { get; set; }
         public DateTime LastSaveTime { get; set; }
 

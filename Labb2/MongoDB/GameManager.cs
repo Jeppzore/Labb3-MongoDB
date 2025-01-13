@@ -53,6 +53,7 @@ namespace Labb3_MongoDB.MongoDB.Entities
                 VisionRange = player.VisionRange,
                 AttackPower = player.AttackPower,
                 DefenseStrength = player.DefenseStrength,
+                Turns = player.Turns,
                 CurrentLocation = player.CurrentLocation // Map position
             };
 
@@ -66,7 +67,7 @@ namespace Labb3_MongoDB.MongoDB.Entities
             Console.WriteLine("Stats:");
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"MaxHealth: {player.MaxHealth}\nCurrent Health: {player.Health}\nLevel: {player.Level}\nExperience: {player.Experience}\nAttack Power: {player.AttackPower}\nDefense Strength: {player.DefenseStrength}");
+            Console.WriteLine($"MaxHealth: {player.MaxHealth}\nCurrent Health: {player.Health}\nLevel: {player.Level}\nExperience: {player.Experience}\nAttack Power: {player.AttackPower}\nDefense Strength: {player.DefenseStrength}\nTurns: {player.Turns}");
             Thread.Sleep(2000);
             Console.ResetColor();
         }
