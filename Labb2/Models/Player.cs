@@ -2,25 +2,25 @@
 
 public class Player : LevelElement
 {
-    public Dice? DefenceDice { get; private set; }
+    public Dice? DefenceDice { get; set; }
 
-    public int VisionRange { get; private set; }
+    public int VisionRange { get; set; }
 
-    public int MaxHealth { get; private set; }
+    public int MaxHealth { get; set; }
 
-    public int Health { get; private set; }
+    public int Health { get; set; }
 
-    public int Level { get; private set; }
+    public int Level { get; set; }
 
-    public int Experience { get; private set; }
+    public int Experience { get; set; }
 
-    public string Name { get; private set; }
+    public string Name { get; set; }
 
-    public bool IsAlive { get; private set; } = true;
+    public bool IsAlive { get; set; } = true;
 
-    public int AttackPower { get; private set; } = 0;
+    public int AttackPower { get; set; } = 0;
 
-    public int DefenseStrength { get; private set; } = 0;
+    public int DefenseStrength { get; set; } = 0;
 
     public Player(Position position) : 
         base(position, '@', ConsoleColor.Yellow, ElementType.Player)

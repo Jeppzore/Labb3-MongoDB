@@ -29,23 +29,17 @@ namespace Labb3_MongoDB.MongoDB.Entities
             Console.ResetColor();
         }
 
+        // TODO: Used only for multiple Player-saves. Delete later if not needed
         public async Task<Player> LoadProgress(string playerId)
         {
             var player = await _mongoDbService!.LoadPlayer(playerId);
             if (player != null)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.SetCursorPosition(0, 27);
-                Console.WriteLine($"Player progress loaded!".PadRight(Console.BufferWidth));
-                Console.ResetColor();
-
-                Console.SetCursorPosition(0, 27);
-                Console.WriteLine(" ".PadRight(Console.BufferWidth));
+                
             }
             return player!;
         }
 
-        // added recently
         public void LoadPlayerData(Player player)
         {
             player = new Player
@@ -65,13 +59,15 @@ namespace Labb3_MongoDB.MongoDB.Entities
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Loaded player '{player.Name}'");
+            Thread.Sleep(1000);
+
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine();
             Console.WriteLine("Stats:");
+
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine($"MaxHealth: {player.MaxHealth}\nCurrent Health: {player.Health}\nLevel: {player.Level}\nExperience: {player.Experience}\nAttack Power: {player.AttackPower}\nDefense Strength: {player.DefenseStrength}");
-
-
+            Thread.Sleep(2000);
             Console.ResetColor();
         }
     }

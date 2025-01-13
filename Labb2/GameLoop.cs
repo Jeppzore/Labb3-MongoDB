@@ -151,6 +151,7 @@ class GameLoop()
         if(existingPlayer != null)
         {
             Console.WriteLine("Existing player found. Loading...");
+            Thread.Sleep(1000);
             gameManager.LoadPlayerData(existingPlayer);
             CreateExistingPlayer(existingPlayer);
         }
@@ -185,6 +186,14 @@ class GameLoop()
     {
         _player = (Labb3_MongoDB.Models.Player)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Player)!;
         _player.SetName(existingPlayer.Name!);
+        _player.Health = existingPlayer.Health;
+        _player.MaxHealth = existingPlayer.MaxHealth;
+        _player.Level = existingPlayer.Level;
+        _player.Experience = existingPlayer.Experience;
+        _player.VisionRange = existingPlayer.VisionRange;
+        _player.AttackPower = existingPlayer.AttackPower;
+        _player.DefenseStrength = existingPlayer.DefenseStrength;
+        _player.Position = (Position)existingPlayer.CurrentLocation!;
     }
 
     public void SaveAndExit()
