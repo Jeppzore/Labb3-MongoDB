@@ -62,8 +62,16 @@ namespace Labb3_MongoDB.MongoDB.Entities
                 CurrentLocation = player.CurrentLocation // Map position
             };
 
+            Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Loaded player '{player.Name}'.");
+            Console.WriteLine($"Loaded player '{player.Name}'");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine();
+            Console.WriteLine("Stats:");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"MaxHealth: {player.MaxHealth}\nCurrent Health: {player.Health}\nLevel: {player.Level}\nExperience: {player.Experience}\nAttack Power: {player.AttackPower}\nDefense Strength: {player.DefenseStrength}");
+
+
             Console.ResetColor();
         }
     }
