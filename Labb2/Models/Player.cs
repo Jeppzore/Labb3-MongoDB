@@ -3,6 +3,7 @@
 public class Player : LevelElement
 {
     public Dice? DefenceDice { get; set; }
+    public string Id { get; set; }
 
     public int VisionRange { get; set; }
 
@@ -17,6 +18,7 @@ public class Player : LevelElement
     public string Name { get; set; }
 
     public bool IsAlive { get; set; } = true;
+    public bool IsMongo { get; set; } = false;
 
     public int AttackPower { get; set; } = 0;
 

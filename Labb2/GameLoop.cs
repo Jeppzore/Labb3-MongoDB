@@ -155,6 +155,7 @@ class GameLoop()
             gameManager.LoadPlayerData(existingPlayer);
             CreateExistingPlayer(existingPlayer);
             _numberOfTurns = existingPlayer.Turns;
+            
         }
         else
         {
@@ -187,6 +188,7 @@ class GameLoop()
     private void CreateExistingPlayer(Labb3_MongoDB.MongoDB.Entities.Player existingPlayer)
     {
         _player = (Labb3_MongoDB.Models.Player)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Player)!;
+        _player.Id = existingPlayer.Id!;
         _player.SetName(existingPlayer.Name!);
         _player.Health = existingPlayer.Health;
         _player.MaxHealth = existingPlayer.MaxHealth;
@@ -196,6 +198,7 @@ class GameLoop()
         _player.AttackPower = existingPlayer.AttackPower;
         _player.DefenseStrength = existingPlayer.DefenseStrength;
         _player.Turns = existingPlayer.Turns;
+        _player.IsMongo = existingPlayer.IsMongo;
         _player.Position = (Position)existingPlayer.CurrentLocation!;
     }
 
@@ -203,14 +206,14 @@ class GameLoop()
     {
 
         // If there is no existing saved game - create a new one in MongoDB
-        if (_players == null)
+        if (_player!.IsMongo == false)
         {
             var mongoDbService = new MongoDbService();
             var gameManager = new GameManager(mongoDbService);
 
             var currentPlayer = new Labb3_MongoDB.MongoDB.Entities.Player
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid().ToString(), // Generates a new unique ID
                 Name = _player!.Name,
                 Health = _player.Health,
                 MaxHealth = _player.MaxHealth,
@@ -220,6 +223,7 @@ class GameLoop()
                 AttackPower = _player.AttackPower,
                 DefenseStrength = _player.DefenseStrength,
                 Turns = _numberOfTurns,
+                IsMongo = _player.IsMongo = true, // Mark as saved in MongoDB
                 CurrentLocation = _player.Position,
                 LastSaveTime = DateTime.UtcNow
             };
@@ -228,13 +232,34 @@ class GameLoop()
             _players = currentPlayer;
 
             SaveGameText();
-
+            Environment.Exit(0);
         }
-        else if (_players != null)
+        else
         {
+            var mongoDbService = new MongoDbService();
+
+            var updatedPlayer = new Labb3_MongoDB.MongoDB.Entities.Player
+            {
+                Id = _player.Id, // Use the existing player's ID
+                Name = _player.Name,
+                Health = _player.Health,
+                MaxHealth = _player.MaxHealth,
+                Level = _player.Level,
+                Experience = _player.Experience,
+                VisionRange = _player.VisionRange,
+                AttackPower = _player.AttackPower,
+                DefenseStrength = _player.DefenseStrength,
+                Turns = _numberOfTurns,
+                IsMongo = true,
+                CurrentLocation = _player.Position,
+                LastSaveTime = DateTime.UtcNow
+            };
+
+            mongoDbService.SavePlayer(updatedPlayer);
+
             SaveGameText();
+            Environment.Exit(0);
         }
-        Environment.Exit(0);
     }
 
     public void SaveGameText()

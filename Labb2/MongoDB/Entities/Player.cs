@@ -24,6 +24,7 @@ namespace Labb3_MongoDB.MongoDB.Entities
         public int AttackPower { get; set; }
         public int DefenseStrength { get; set; }
         public int Turns { get; set; }
+        public bool IsMongo { get; set; } = true;
         public Position? CurrentLocation { get; set; }
         public DateTime LastSaveTime { get; set; }
 
