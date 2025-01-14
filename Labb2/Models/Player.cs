@@ -3,27 +3,17 @@
 public class Player : LevelElement
 {
     public Dice? DefenceDice { get; set; }
-    public string Id { get; set; }
-
+    public string ?Id { get; set; }
     public int VisionRange { get; set; }
-
     public int MaxHealth { get; set; }
-
     public int Health { get; set; }
-
     public int Level { get; set; }
-
     public int Experience { get; set; }
-
     public string Name { get; set; }
-
     public bool IsAlive { get; set; } = true;
     public bool IsMongo { get; set; } = false;
-
     public int AttackPower { get; set; } = 0;
-
     public int DefenseStrength { get; set; } = 0;
-
     public int Turns { get; set; } = 0;
 
     public Player(Position position) : 

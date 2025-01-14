@@ -12,7 +12,10 @@ namespace Labb3_MongoDB.MongoDB
 {
     public class MongoDbService
     {
-        private readonly IMongoCollection<Player> ?_playerCollection;      
+        private readonly IMongoCollection<Player> ?_playerCollection;
+        private readonly IMongoCollection<Rat> ?_ratCollection;
+        private readonly IMongoCollection<Snake>? _snakeCollection;
+
 
         // TODO: Replace hardcoded connectionString with hidden code ex. appsettings.json
         public MongoDbService(string connectionString = "mongodb://localhost:27017/", string databaseName = "JesperJohansson")
@@ -20,6 +23,9 @@ namespace Labb3_MongoDB.MongoDB
             var client = new MongoClient(connectionString);
             var database = client.GetDatabase(databaseName);
             _playerCollection = database.GetCollection<Player>("Players");
+            _ratCollection = database.GetCollection<Rat>("Rats");
+            _snakeCollection = database.GetCollection<Snake>("Snakes");
+
         }
 
         public void SavePlayer(Player player)
@@ -30,6 +36,44 @@ namespace Labb3_MongoDB.MongoDB
                 _playerCollection.ReplaceOne(
                     p => p.Id == player.Id,
                     player,
+                    new ReplaceOptions { IsUpsert = true }
+                    );
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error saving player: {ex.Message}");
+                throw;
+
+            }
+        }
+
+        public void SaveRat(Rat rat)
+        {
+            try
+            {
+                // Update if current player exists, otherwise insert
+                _ratCollection!.ReplaceOne(
+                    r => r.Id == rat.Id,
+                    rat,
+                    new ReplaceOptions { IsUpsert = true }
+                    );
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error saving player: {ex.Message}");
+                throw;
+
+            }
+        }
+
+        public void SaveSnake(Snake snake)
+        {
+            try
+            {
+                // Update if current player exists, otherwise insert
+                _snakeCollection!.ReplaceOne(
+                    s => s.Id == snake.Id,
+                    snake,
                     new ReplaceOptions { IsUpsert = true }
                     );
             }
@@ -61,6 +105,29 @@ namespace Labb3_MongoDB.MongoDB
                 Debug.WriteLine(result != null
                     ? $"Player found: {result.Name}"
                     : "No player found in the database.");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error querying MongoDB: {ex.Message}");
+                throw; // Re-throw the exception to identify it
+            }
+        }
+
+        public Rat? GetExistingRat()
+        {
+            try
+            {
+                if (_ratCollection == null)
+                {
+                    Debug.WriteLine("Error: _playerCollection is not initialized.");
+                    throw new InvalidOperationException("The _playerCollection-collection is not initialized.");
+                }
+                Debug.WriteLine("_ratCollection is not null. Starting query.");
+                var result = _ratCollection.Find(_ => true).FirstOrDefault();
+                Debug.WriteLine(result != null
+                    ? $"Rat found: {result.Name}"
+                    : "No rat found in the database.");
                 return result;
             }
             catch (Exception ex)

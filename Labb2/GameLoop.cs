@@ -1,10 +1,8 @@
-﻿using Elasticsearch.Net;
-using Labb3_MongoDB;
+﻿using Labb3_MongoDB;
 using Labb3_MongoDB.Models;
 using Labb3_MongoDB.MongoDB;
 using Labb3_MongoDB.MongoDB.Entities;
 using MongoDB.Driver;
-using System.Diagnostics;
 
 class GameLoop()
 {
@@ -13,11 +11,18 @@ class GameLoop()
 
     private Labb3_MongoDB.Models.Player? _player;
     private Labb3_MongoDB.MongoDB.Entities.Player? _players;
-    private int _numberOfTurns = 0;
-    private int _totalEnemies = 0;
+
+    private Labb3_MongoDB.Models.Rat? _rat;
+    private Labb3_MongoDB.MongoDB.Entities.Rat? _rats;
+    //private List<Labb3_MongoDB.Models.Rat> _rat = new();
+
+    private Labb3_MongoDB.Models.Snake? _snake;
+    private Labb3_MongoDB.MongoDB.Entities.Snake? _snakes;
+
+
+    public int _numberOfTurns = 0;
+    public int _totalEnemies = 0;
     private List<Enemy> _deadEnemies = new();
-
-
 
     public void Start()
     {
@@ -147,20 +152,32 @@ class GameLoop()
         LevelData.Load("Levels\\Level1.txt");
 
         var existingPlayer = mongoDbService.GetExistingPlayer();
+        var existingRat = mongoDbService.GetExistingRat();
 
-        if(existingPlayer != null)
+
+        if (existingPlayer != null)
         {
             Console.WriteLine("Existing player found. Loading...");
             Thread.Sleep(1000);
             gameManager.LoadPlayerData(existingPlayer);
             CreateExistingPlayer(existingPlayer);
             _numberOfTurns = existingPlayer.Turns;
-            
+
+        }
+        if (existingRat != null)
+        {
+            Console.SetCursorPosition(0, 19);
+            Console.WriteLine("Existing rat found. Loading...");
+            Thread.Sleep(1000);
+            gameManager.LoadRatData(existingRat);
+            CreateExistingRat(existingRat);
         }
         else
         {
             Console.Write("Please enter your name (max 8 characters): ");
             CreateNewPlayer();
+            CreateNewRat();
+            //CreateNewSnake();
             _player!.Turns = 0;
             _numberOfTurns = 0;
         }
@@ -185,6 +202,13 @@ class GameLoop()
         _player.SetName(name);
     }
 
+    private void CreateNewRat()
+    {
+        // TODO: Foreach loop to add all the rats to a list
+        _rat = (Labb3_MongoDB.Models.Rat)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Rat)!;      
+    }
+
+
     private void CreateExistingPlayer(Labb3_MongoDB.MongoDB.Entities.Player existingPlayer)
     {
         _player = (Labb3_MongoDB.Models.Player)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Player)!;
@@ -202,9 +226,30 @@ class GameLoop()
         _player.Position = (Position)existingPlayer.CurrentLocation!;
     }
 
-    public void SaveAndExit()
+    private void CreateExistingRat(Labb3_MongoDB.MongoDB.Entities.Rat existingRat)
     {
+        _rat = (Labb3_MongoDB.Models.Rat)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Rat)!;
+        _rat.Id = existingRat.Id!;
+        _rat.Name = existingRat.Name!;
+        _rat.Health = existingRat.Health;
+        _rat.AttackPower = existingRat.AttackPower;
+        _rat.DefenseStrength = existingRat.DefenseStrength;
+        _rat.IsMongo = existingRat.IsMongo;
+        _rat.Position = (Position)existingRat.CurrentLocation!;
+    }
 
+    public void SaveAndExit()
+    {       
+        SavePlayer();
+        SaveRat();
+        //SaveSnake();
+
+        SaveGameText();
+        Environment.Exit(0);
+    }
+
+    private void SavePlayer()
+    {
         // If there is no existing saved game - create a new one in MongoDB
         if (_player!.IsMongo == false)
         {
@@ -231,9 +276,10 @@ class GameLoop()
             gameManager.SaveProgress(currentPlayer);
             _players = currentPlayer;
 
-            SaveGameText();
-            Environment.Exit(0);
+            //SaveGameText();
+            //Environment.Exit(0);
         }
+        // Update existing saved game with the changed property values
         else
         {
             var mongoDbService = new MongoDbService();
@@ -257,8 +303,92 @@ class GameLoop()
 
             mongoDbService.SavePlayer(updatedPlayer);
 
-            SaveGameText();
-            Environment.Exit(0);
+            //SaveGameText();
+            //Environment.Exit(0);
+        }
+    }
+
+    private void SaveRat()
+    {
+        // If there is no existing saved game - create a new one in MongoDB
+        if (_rat!.IsMongo == false)
+        {
+            var mongoDbService = new MongoDbService();
+            var gameManager = new GameManager(mongoDbService);
+
+            var currentRat = new Labb3_MongoDB.MongoDB.Entities.Rat
+            {
+                Id = Guid.NewGuid().ToString(), // Generates a new unique ID
+                Name = _rat!.Name,
+                Health = _rat.Health,
+                AttackPower = _rat.AttackPower,
+                DefenseStrength = _rat.DefenseStrength,
+                IsMongo = _rat.IsMongo = true, // Mark as saved in MongoDB
+                CurrentLocation = _rat.Position,
+            };
+
+            gameManager.SaveProgress(currentRat);
+            _rats = currentRat;
+        }
+        // Update existing saved game with the changed property values
+        else
+        {
+            var mongoDbService = new MongoDbService();
+
+            var updatedRat = new Labb3_MongoDB.MongoDB.Entities.Rat
+            {
+                Id = _rat.Id, // Use the existing rat's ID
+                Name = _rat!.Name,
+                Health = _rat.Health,
+                AttackPower = _rat.AttackPower,
+                DefenseStrength = _rat.DefenseStrength,
+                IsMongo = _rat.IsMongo = true, // Mark as saved in MongoDB
+                CurrentLocation = _rat.Position,
+            };
+
+            mongoDbService.SaveRat(updatedRat);
+        }
+    }
+
+    private void SaveSnake()
+    {
+        // If there is no existing saved game - create a new one in MongoDB
+        if (_snake!.IsMongo == false)
+        {
+            var mongoDbService = new MongoDbService();
+            var gameManager = new GameManager(mongoDbService);
+
+            var currentSnake = new Labb3_MongoDB.MongoDB.Entities.Snake
+            {
+                Id = Guid.NewGuid().ToString(), // Generates a new unique ID
+                Name = _snake!.Name,
+                Health = _snake.Health,
+                AttackPower = _snake.AttackPower,
+                DefenseStrength = _snake.DefenseStrength,
+                IsMongo = _snake.IsMongo = true, // Mark as saved in MongoDB
+                CurrentLocation = _snake.Position,
+            };
+
+            gameManager.SaveProgress(currentSnake);
+            _snakes = currentSnake;
+        }
+        // Update existing saved game with the changed property values
+        else
+        {
+            var mongoDbService = new MongoDbService();
+
+            var updatedSnake = new Labb3_MongoDB.MongoDB.Entities.Snake
+            {
+                Id = _snake.Id, // Use the existing snake's ID
+                Name = _snake!.Name,
+                Health = _snake.Health,
+                AttackPower = _snake.AttackPower,
+                DefenseStrength = _snake.DefenseStrength,
+                IsMongo = _snake.IsMongo = true, // Mark as saved in MongoDB
+                CurrentLocation = _snake.Position,
+            };
+
+            mongoDbService.SaveSnake(updatedSnake);
         }
     }
 
