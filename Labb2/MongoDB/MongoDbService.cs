@@ -94,6 +94,15 @@ namespace Labb3_MongoDB.MongoDB
             }
         }
 
+        public void DeleteCollection()
+        {
+            var client = new MongoClient("mongodb://localhost:27017"); // Adjust the connection string if needed
+            var database = client.GetDatabase("JesperJohansson");     // Adjust the database name if needed
+
+            database.DropCollection("Elements"); // Drops the collection named "Elements"
+            Debug.WriteLine("Successfully deleted the Elements collection.");
+        }
+
         //public void SavePlayer(Player player)
         //{
         //    try

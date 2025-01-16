@@ -84,6 +84,7 @@ namespace Labb3_MongoDB.MongoDB.Entities
             Console.WriteLine($"Finalizing...");
             Thread.Sleep(2000);
             Console.ResetColor();
+            Console.Clear();
         }
 
         public void LoadRatData(Rat rat)

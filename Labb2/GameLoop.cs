@@ -46,7 +46,10 @@ class GameLoop()
         var hasWon = GameLoopHelper.IsWinCondition(_totalEnemies - _deadEnemies.Count <= 0);
         if (hasWon)
         {
-            Start();
+            // Rensa databasen
+            var mongoDbService = new MongoDbService();
+            mongoDbService.DeleteCollection();
+            Environment.Exit(0);
         }
 
         _player!.PlayerLevelCheck();

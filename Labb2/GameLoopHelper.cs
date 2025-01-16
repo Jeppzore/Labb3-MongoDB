@@ -42,7 +42,7 @@ public static class GameLoopHelper
             Console.WriteLine("Y O U  W I N!");
             Thread.Sleep(2000);
 
-            Console.WriteLine("Restarting game...");
+            Console.WriteLine("Exiting game...");
             Thread.Sleep(3000);
 
             Console.ResetColor();
