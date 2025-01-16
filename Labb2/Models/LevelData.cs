@@ -15,7 +15,7 @@ class LevelData
         StreamReader sr = new(fileName);
         string line = sr.ReadLine()!;
 
-        int y = 0; 
+        int y = 0;
 
         while (line != null)
         {
@@ -27,7 +27,7 @@ class LevelData
                 }
 
                 if (line[x] == 'r') // Rat
-                {          
+                {
                     _elements.Add(new Rat(new Position(x, y)));
                 }
 
@@ -50,7 +50,7 @@ class LevelData
             y++;
 
             line = sr.ReadLine()!;
-        }  
+        }
     }
 
     public static void DrawElementsWithinRange(Player player, int visionRange)
@@ -63,7 +63,7 @@ class LevelData
             {
                 element.Draw();
 
-                if(element.Type == ElementType.Wall)
+                if (element.Type == ElementType.Wall)
                 {
                     element.IsDiscovered = true;
                 }

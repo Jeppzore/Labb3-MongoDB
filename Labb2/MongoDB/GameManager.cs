@@ -1,21 +1,13 @@
-﻿using Elasticsearch.Net.Specification.AsyncSearchApi;
-using Labb3_MongoDB.Models;
-using Labb3_MongoDB.MongoDB.Entities;
-using System;
-using System.Collections.Generic;
+﻿using Labb3_MongoDB.Models;
 using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Labb3_MongoDB.MongoDB.Entities
 {
 
     public class GameManager
     {
-        LevelElement ?levelElement;
-        private readonly MongoDbService ?_mongoDbService;
+        LevelElement? levelElement;
+        private readonly MongoDbService? _mongoDbService;
 
         public GameManager(MongoDbService? mongoDbService)
         {
@@ -27,6 +19,35 @@ namespace Labb3_MongoDB.MongoDB.Entities
             _mongoDbService!.SaveElements(elements);
             SaveProgressText();
         }
+
+        //public void SaveProgress(Player player)
+        //{
+        //    _mongoDbService!.SavePlayer(player);
+        //    SaveProgressText();
+        //}
+
+        //public void SaveProgress(Rat rat)
+        //{
+        //    _mongoDbService!.SaveRat(rat);
+        //    SaveProgressText();
+        //}
+
+        //public void SaveProgress(Snake snake)
+        //{
+        //    _mongoDbService!.SaveSnake(snake);
+        //    SaveProgressText();
+        //}
+
+        // TODO: Used only for multiple Player-saves. Delete later if not needed
+        //public async Task<Player> LoadProgress(string playerId)
+        //{
+        //    var player = await _mongoDbService!.LoadPlayer(playerId);
+        //    if (player != null)
+        //    {
+
+        //    }
+        //    return player!;
+        //}
 
         public void LoadElements(List<LevelElement> element)
         {
@@ -56,6 +77,34 @@ namespace Labb3_MongoDB.MongoDB.Entities
             Thread.Sleep(2000);
             Console.ResetColor();
             Console.Clear();
+        }
+
+        public void LoadRatData(Rat rat)
+        {
+            rat = new Rat
+            {
+                Id = rat.Id,
+                Name = rat.Name,
+                Health = rat.Health,
+                AttackPower = rat.AttackPower,
+                DefenseStrength = rat.DefenseStrength,
+                CurrentLocation = rat.CurrentLocation
+            };
+
+            Console.SetCursorPosition(0, 20);
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"Loaded '{rat.Name}'");
+            Thread.Sleep(1000);
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine();
+            Console.WriteLine("Stats:");
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"Current Health: {rat.Health}\nAttack Power: {rat.AttackPower}\nDefense Strength: {rat.DefenseStrength}");
+            Thread.Sleep(2000);
+            Console.ResetColor();
         }
 
         private static void SaveProgressText()

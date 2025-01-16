@@ -3,7 +3,7 @@
 namespace Labb3_MongoDB.Models;
 
 [BsonDiscriminator("HealthPotion")]
-public class HealthPotion(Position position) : 
+public class HealthPotion(Position position) :
     LevelElement(position, '%', ConsoleColor.DarkRed, ElementType.HealthPotion)
 {
 }

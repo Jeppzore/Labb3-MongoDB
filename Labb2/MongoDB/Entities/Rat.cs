@@ -1,11 +1,6 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using Labb3_MongoDB.Models;
 using MongoDB.Bson;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Labb3_MongoDB.Models;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Labb3_MongoDB.MongoDB.Entities
 {

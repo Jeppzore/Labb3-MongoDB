@@ -7,8 +7,9 @@ namespace Labb3_MongoDB.Models;
 public class Rat : Enemy
 {
     public bool IsMongo { get; set; } = false;
+    //public string ?Id { get; set; }
 
-    public Rat(Position position) : 
+    public Rat(Position position) :
         base(position, icon: 'r', ConsoleColor.Red, ElementType.Rat, experience: 5)
     {
         Health = 10;
@@ -24,7 +25,7 @@ public class Rat : Enemy
         MoveRat(player);
 
         if (player.IsWithinVisionRange(this))
-        {      
+        {
             DrawNewPosition();
         }
     }

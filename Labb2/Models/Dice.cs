@@ -11,14 +11,14 @@ public class Dice(int numberOfDice, int sidesPerDice, int modifier)
     {
         int totalRoll = 0;
 
-        if (numberOfDice > 0) 
+        if (numberOfDice > 0)
         {
             for (int i = 0; i < numberOfDice; i++)
             {
                 int diceRoll = random.Next(1, sidesPerDice + 1);
                 totalRoll += diceRoll;
             }
-        
+
             totalRoll += modifier;
         }
 

@@ -1,27 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Labb3_MongoDB.Models;
-using Labb3_MongoDB.MongoDB.Entities;
+﻿using Labb3_MongoDB.Models;
 using Microsoft.Extensions.Configuration;
-using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Diagnostics;
 
 namespace Labb3_MongoDB.MongoDB
 {
     public class MongoDbService
     {
         private readonly IMongoCollection<LevelElement> _elementCollection;
+        private readonly IMongoDatabase? _database;
 
         public MongoDbService()
         {
-            
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddUserSecrets<MongoDbService>(); 
+                .AddUserSecrets<MongoDbService>();
 
             var configuration = builder.Build();
 
@@ -31,6 +25,7 @@ namespace Labb3_MongoDB.MongoDB
             var client = new MongoClient(connectionString);
             var database = client.GetDatabase(databaseName);
             _elementCollection = database.GetCollection<LevelElement>("Elements");
+            _database = client.GetDatabase(databaseName);
         }
 
         public void SaveElements(List<LevelElement> elements)
@@ -98,13 +93,8 @@ namespace Labb3_MongoDB.MongoDB
 
         public void DeleteCollection()
         {
-            var client = new MongoClient("mongodb://localhost:27017"); // Adjust the connection string if needed
-            var database = client.GetDatabase("JesperJohansson");     // Adjust the database name if needed
-
-            database.DropCollection("Elements"); // Drops the collection named "Elements"
+            _database!.DropCollection("Elements");
             Debug.WriteLine("Successfully deleted the Elements collection.");
         }
-
-  
     }
 }

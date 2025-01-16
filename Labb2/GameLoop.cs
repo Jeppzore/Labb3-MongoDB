@@ -4,8 +4,6 @@ using Labb3_MongoDB.MongoDB;
 using Labb3_MongoDB.MongoDB.Entities;
 using MongoDB.Driver;
 using System.Diagnostics;
-using System.Numerics;
-using System.Xml.Linq;
 
 class GameLoop()
 {
@@ -212,7 +210,7 @@ class GameLoop()
         _totalEnemies = LevelData.Elements.OfType<Enemy>().ToList().Count;
         _deadEnemies = new();
 
-        Console.ResetColor(); 
+        Console.ResetColor();
         Console.CursorVisible = false;
     }
 
@@ -269,7 +267,7 @@ class GameLoop()
 
     public void SaveAndExit()
     {
-       
+
         SaveElements();
 
         SaveGameText();
@@ -315,7 +313,7 @@ class GameLoop()
     //        //gameManager.SaveProgress(currentPlayer);
     //        _players = currentPlayer;
     //    }
-        // Update existing saved game with the changed property values
+    // Update existing saved game with the changed property values
     //    else
     //    {
     //        var mongoDbService = new MongoDbService();

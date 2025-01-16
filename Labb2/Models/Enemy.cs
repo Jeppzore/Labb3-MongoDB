@@ -19,7 +19,7 @@ public abstract class Enemy : LevelElement
 
     public int Experience { get; set; } = 0;
 
-    protected Enemy(Position position, char icon, ConsoleColor consoleColor, ElementType type, int experience) : 
+    protected Enemy(Position position, char icon, ConsoleColor consoleColor, ElementType type, int experience) :
         base(position, icon, consoleColor, type)
     {
         IsVisible = false;

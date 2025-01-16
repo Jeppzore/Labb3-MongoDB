@@ -1,6 +1,5 @@
 ﻿using Labb3_MongoDB.MongoDB;
 using MongoDB.Bson.Serialization.Attributes;
-using System.Xml.Linq;
 
 namespace Labb3_MongoDB.Models;
 
@@ -11,6 +10,7 @@ public class Player : LevelElement
     private readonly MongoDbService? _mongoDbService;
 
     public Dice? DefenceDice { get; set; }
+    //public string? Id { get; set; }
     public int VisionRange { get; set; }
     public int MaxHealth { get; set; }
     public int Health { get; set; }
@@ -23,7 +23,7 @@ public class Player : LevelElement
     public int DefenseStrength { get; set; } = 0;
     public int Turns { get; set; } = 0;
 
-    public Player(Position position) : 
+    public Player(Position position) :
         base(position, '@', ConsoleColor.Yellow, ElementType.Player)
     {
         Health = 100;

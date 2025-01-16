@@ -7,8 +7,9 @@ namespace Labb3_MongoDB.Models;
 public class Snake : Enemy
 {
     public bool IsMongo { get; set; } = false;
+    //public string ?Id { get; set; }
 
-    public Snake(Position position) : 
+    public Snake(Position position) :
         base(position, icon: 's', ConsoleColor.Green, ElementType.Snake, experience: 10)
     {
         Health = 20;
