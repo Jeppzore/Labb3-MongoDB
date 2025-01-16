@@ -174,6 +174,10 @@ class GameLoop()
             var existingSnakes = LevelData.Elements.OfType<Labb3_MongoDB.Models.Snake>().ToList();
             Debug.WriteLine($"Snakes loaded: {existingSnakes.Count}");
 
+            //var existingWall = LevelData.Elements.AsQueryable().OfType<Wall>().Where(wall => wall.IsDiscovered);
+            //existingWall.Draw();   
+            
+
             //CreateExistingPlayer(existingElements);
 
         }
