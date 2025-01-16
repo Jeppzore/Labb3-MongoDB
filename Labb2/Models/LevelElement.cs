@@ -1,7 +1,14 @@
-﻿namespace Labb3_MongoDB.Models;
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace Labb3_MongoDB.Models;
+[BsonIgnoreExtraElements]
+[BsonDiscriminator(Required = true)]
+[BsonKnownTypes(typeof(Player), typeof(Rat), typeof(Snake), typeof(Wall), typeof(HealthPotion))]
 
 public abstract class LevelElement(Position position, char icon, ConsoleColor consoleColor, ElementType type)
 {
+    public string? Id { get; set; } = Guid.NewGuid().ToString();
+
     public bool IsVisible { get; set; } = false;
 
     public bool IsDiscovered { get; set; } = false;
@@ -10,9 +17,9 @@ public abstract class LevelElement(Position position, char icon, ConsoleColor co
 
     public ElementType Type { get; set; } = type;
 
-    protected char Icon { get; set; } = icon;
+    public char Icon { get; set; } = icon;
 
-    protected ConsoleColor CharacterColor { get; set; } = consoleColor;
+    public ConsoleColor CharacterColor { get; set; } = consoleColor;
 
     public void Draw()
     {

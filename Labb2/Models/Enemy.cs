@@ -1,5 +1,8 @@
-﻿namespace Labb3_MongoDB.Models;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
+namespace Labb3_MongoDB.Models;
+
+[BsonDiscriminator("Enemy")]
 public abstract class Enemy : LevelElement
 {
     public string? Name { get; set; }

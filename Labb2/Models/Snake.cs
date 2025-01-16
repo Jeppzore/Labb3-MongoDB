@@ -1,9 +1,13 @@
-﻿namespace Labb3_MongoDB.Models;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
+namespace Labb3_MongoDB.Models;
+
+[BsonIgnoreExtraElements]
+[BsonDiscriminator("Snake")]
 public class Snake : Enemy
 {
     public bool IsMongo { get; set; } = false;
-    public string ?Id { get; set; }
+    //public string ?Id { get; set; }
 
     public Snake(Position position) : 
         base(position, icon: 's', ConsoleColor.Green, ElementType.Snake, experience: 10)

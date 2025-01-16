@@ -1,9 +1,13 @@
-﻿namespace Labb3_MongoDB.Models;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
+namespace Labb3_MongoDB.Models;
+
+[BsonIgnoreExtraElements]
+[BsonDiscriminator("Player")]
 public class Player : LevelElement
 {
     public Dice? DefenceDice { get; set; }
-    public string ?Id { get; set; }
+    //public string? Id { get; set; }
     public int VisionRange { get; set; }
     public int MaxHealth { get; set; }
     public int Health { get; set; }

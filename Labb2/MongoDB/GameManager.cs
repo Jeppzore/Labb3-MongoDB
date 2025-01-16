@@ -3,6 +3,7 @@ using Labb3_MongoDB.Models;
 using Labb3_MongoDB.MongoDB.Entities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -21,64 +22,66 @@ namespace Labb3_MongoDB.MongoDB.Entities
             _mongoDbService = mongoDbService;
         }
 
-        public void SaveProgress(Player player)
+        public void SaveProgress(List<LevelElement> elements)
         {
-            _mongoDbService!.SavePlayer(player);
+            _mongoDbService!.SaveElements(elements);
             SaveProgressText();
         }
 
+        //public void SaveProgress(Player player)
+        //{
+        //    _mongoDbService!.SavePlayer(player);
+        //    SaveProgressText();
+        //}
 
-        public void SaveProgress(Rat rat)
-        {
-            _mongoDbService!.SaveRat(rat);
-            SaveProgressText();
-        }
+        //public void SaveProgress(Rat rat)
+        //{
+        //    _mongoDbService!.SaveRat(rat);
+        //    SaveProgressText();
+        //}
 
-        public void SaveProgress(Snake snake)
-        {
-            _mongoDbService!.SaveSnake(snake);
-            SaveProgressText();
-        }
+        //public void SaveProgress(Snake snake)
+        //{
+        //    _mongoDbService!.SaveSnake(snake);
+        //    SaveProgressText();
+        //}
 
         // TODO: Used only for multiple Player-saves. Delete later if not needed
-        public async Task<Player> LoadProgress(string playerId)
-        {
-            var player = await _mongoDbService!.LoadPlayer(playerId);
-            if (player != null)
-            {
+        //public async Task<Player> LoadProgress(string playerId)
+        //{
+        //    var player = await _mongoDbService!.LoadPlayer(playerId);
+        //    if (player != null)
+        //    {
                 
-            }
-            return player!;
-        }
+        //    }
+        //    return player!;
+        //}
 
-        public void LoadPlayerData(Player player)
+        public void LoadElements(List<LevelElement> element)
         {
-            player = new Player
+            try
             {
-                Id = player.Id,
-                Name = player.Name,
-                Health = player.Health,
-                MaxHealth = player.MaxHealth,
-                Level = player.Level,
-                Experience = player.Experience,
-                VisionRange = player.VisionRange,
-                AttackPower = player.AttackPower,
-                DefenseStrength = player.DefenseStrength,
-                Turns = player.Turns,
-                CurrentLocation = player.CurrentLocation // Map position
-            };
+                // Clear the current in-memory elements and populate with saved data
+                LevelData._elements.Clear();
+                LevelData._elements.AddRange(element);
+
+                // Log or debug to verify loading
+                Debug.WriteLine($"Loaded {element.Count} elements from the database.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading elements: {ex.Message}");
+                throw;
+            }
 
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Loaded player '{player.Name}'");
+            Console.WriteLine($"Loading save file...");
             Thread.Sleep(1000);
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine();
-            Console.WriteLine("Stats:");
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"MaxHealth: {player.MaxHealth}\nCurrent Health: {player.Health}\nLevel: {player.Level}\nExperience: {player.Experience}\nAttack Power: {player.AttackPower}\nDefense Strength: {player.DefenseStrength}\nTurns: {player.Turns}");
+            Console.WriteLine($"Finalizing...");
             Thread.Sleep(2000);
             Console.ResetColor();
         }

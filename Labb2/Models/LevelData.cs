@@ -2,7 +2,7 @@
 
 class LevelData
 {
-    private static List<LevelElement> _elements = [];
+    public static List<LevelElement> _elements = [];
 
     public static List<LevelElement> Elements { get { return _elements; } }
 

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Labb3_MongoDB.Models;
 using Labb3_MongoDB.MongoDB.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -12,9 +13,10 @@ namespace Labb3_MongoDB.MongoDB
 {
     public class MongoDbService
     {
-        private readonly IMongoCollection<Player> ?_playerCollection;
-        private readonly IMongoCollection<Rat> ?_ratCollection;
-        private readonly IMongoCollection<Snake>? _snakeCollection;
+        private readonly IMongoCollection<LevelElement> _elementCollection;
+        //private readonly IMongoCollection<Player> ?_playerCollection;
+        //private readonly IMongoCollection<Rat> ?_ratCollection;
+        //private readonly IMongoCollection<Snake>? _snakeCollection;
 
 
         // TODO: Replace hardcoded connectionString with hidden code ex. appsettings.json
@@ -22,22 +24,32 @@ namespace Labb3_MongoDB.MongoDB
         {
             var client = new MongoClient(connectionString);
             var database = client.GetDatabase(databaseName);
-            _playerCollection = database.GetCollection<Player>("Players");
-            _ratCollection = database.GetCollection<Rat>("Rats");
-            _snakeCollection = database.GetCollection<Snake>("Snakes");
+            _elementCollection = database.GetCollection<LevelElement>("Elements");
+            //_playerCollection = database.GetCollection<Player>("Players");
+            //_ratCollection = database.GetCollection<Rat>("Rats");
+            //_snakeCollection = database.GetCollection<Snake>("Snakes");
 
         }
 
-        public void SavePlayer(Player player)
+        public void SaveElements(List<LevelElement> elements)
         {
             try
             {
-                // Update if current player exists, otherwise insert
-                _playerCollection.ReplaceOne(
-                    p => p.Id == player.Id,
-                    player,
+                foreach (var element in elements)
+                {
+                    // Ensure each element has a unique Id
+                    if (string.IsNullOrEmpty(element.Id))
+                    {
+                        element.Id = Guid.NewGuid().ToString();
+                    }
+
+                    // Update if current player exists, otherwise insert
+                    _elementCollection.ReplaceOne(
+                    e => e.Id == element.Id,
+                    element,
                     new ReplaceOptions { IsUpsert = true }
                     );
+                }
             }
             catch (Exception ex)
             {
@@ -47,99 +59,132 @@ namespace Labb3_MongoDB.MongoDB
             }
         }
 
-        public void SaveRat(Rat rat)
-        {
-            try
-            {
-                // Update if current player exists, otherwise insert
-                _ratCollection!.ReplaceOne(
-                    r => r.Id == rat.Id,
-                    rat,
-                    new ReplaceOptions { IsUpsert = true }
-                    );
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error saving player: {ex.Message}");
-                throw;
+        //public void SavePlayer(Player player)
+        //{
+        //    try
+        //    {
+        //        // Update if current player exists, otherwise insert
+        //        _playerCollection.ReplaceOne(
+        //            p => p.Id == player.Id,
+        //            player,
+        //            new ReplaceOptions { IsUpsert = true }
+        //            );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.WriteLine($"Error saving player: {ex.Message}");
+        //        throw;
 
-            }
-        }
+        //    }
+        //}
 
-        public void SaveSnake(Snake snake)
-        {
-            try
-            {
-                // Update if current player exists, otherwise insert
-                _snakeCollection!.ReplaceOne(
-                    s => s.Id == snake.Id,
-                    snake,
-                    new ReplaceOptions { IsUpsert = true }
-                    );
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error saving player: {ex.Message}");
-                throw;
+        //public void SaveRat(Rat rat)
+        //{
+        //    try
+        //    {
+        //        // Update if current player exists, otherwise insert
+        //        _ratCollection!.ReplaceOne(
+        //            r => r.Id == rat.Id,
+        //            rat,
+        //            new ReplaceOptions { IsUpsert = true }
+        //            );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.WriteLine($"Error saving player: {ex.Message}");
+        //        throw;
 
-            }
-        }
+        //    }
+        //}
+
+        //public void SaveSnake(Snake snake)
+        //{
+        //    try
+        //    {
+        //        // Update if current player exists, otherwise insert
+        //        _snakeCollection!.ReplaceOne(
+        //            s => s.Id == snake.Id,
+        //            snake,
+        //            new ReplaceOptions { IsUpsert = true }
+        //            );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.WriteLine($"Error saving player: {ex.Message}");
+        //        throw;
+
+        //    }
+        //}
 
         // Can be used to check for a specific playerId for multiple players
-        public async Task<Player> LoadPlayer(string playerId)
-        {
-            return await _playerCollection.Find(p => p.Id == playerId).FirstOrDefaultAsync();
-        }
+        //public async Task<Player> LoadPlayer(string playerId)
+        //{
+        //    return await _playerCollection.Find(p => p.Id == playerId).FirstOrDefaultAsync();
+        //}
 
-        public Player? GetExistingPlayer()
+        public List<LevelElement> GetElements()
         {
             try
             {
-                if (_playerCollection == null)
-                {
-                    Debug.WriteLine("Error: _playerCollection is not initialized.");
-                    throw new InvalidOperationException("The _playerCollection-collection is not initialized.");
-                }
-                Debug.WriteLine("_playerCollection is not null. Starting query.");
-                var result = _playerCollection.Find(_ => true).FirstOrDefault();
-                Debug.WriteLine(result != null
-                    ? $"Player found: {result.Name}"
-                    : "No player found in the database.");
+                var result = _elementCollection.Find(_ => true).ToList();
                 return result;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error querying MongoDB: {ex.Message}");
-                throw; // Re-throw the exception to identify it
+                Debug.WriteLine($"Error retrieving elements: {ex.Message}");
+                throw;
             }
         }
 
-        public Rat? GetExistingRat()
-        {
-            try
-            {
-                if (_ratCollection == null)
-                {
-                    Debug.WriteLine("Error: _playerCollection is not initialized.");
-                    throw new InvalidOperationException("The _playerCollection-collection is not initialized.");
-                }
-                Debug.WriteLine("_ratCollection is not null. Starting query.");
-                var result = _ratCollection.Find(_ => true).FirstOrDefault();
-                Debug.WriteLine(result != null
-                    ? $"Rat found: {result.Name}"
-                    : "No rat found in the database.");
-                return result;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error querying MongoDB: {ex.Message}");
-                throw; // Re-throw the exception to identify it
-            }
-        }
+        //public Player? GetExistingPlayer()
+        //{
+        //    try
+        //    {
+        //        if (_playerCollection == null)
+        //        {
+        //            Debug.WriteLine("Error: _playerCollection is not initialized.");
+        //            throw new InvalidOperationException("The _playerCollection-collection is not initialized.");
+        //        }
+        //        Debug.WriteLine("_playerCollection is not null. Starting query.");
+        //        var result = _playerCollection.Find(_ => true).FirstOrDefault();
+        //        Debug.WriteLine(result != null
+        //            ? $"Player found: {result.Name}"
+        //            : "No player found in the database.");
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.WriteLine($"Error querying MongoDB: {ex.Message}");
+        //        throw; // Re-throw the exception to identify it
+        //    }
+        //}
 
-        public async Task DeletePlayer(string playerId)
-        {
-            await _playerCollection.DeleteOneAsync(players => players.Id == playerId);
-        }
+        //public Rat? GetExistingRat()
+        //{
+        //    try
+        //    {
+        //        if (_ratCollection == null)
+        //        {
+        //            Debug.WriteLine("Error: _playerCollection is not initialized.");
+        //            throw new InvalidOperationException("The _playerCollection-collection is not initialized.");
+        //        }
+        //        Debug.WriteLine("_ratCollection is not null. Starting query.");
+        //        var result = _ratCollection.Find(_ => true).FirstOrDefault();
+        //        Debug.WriteLine(result != null
+        //            ? $"Rat found: {result.Name}"
+        //            : "No rat found in the database.");
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.WriteLine($"Error querying MongoDB: {ex.Message}");
+        //        throw; // Re-throw the exception to identify it
+        //    }
+        //}
+
+        //public async Task DeletePlayer(string playerId)
+        //{
+        //    await _playerCollection.DeleteOneAsync(players => players.Id == playerId);
+        //}
     }
 }
