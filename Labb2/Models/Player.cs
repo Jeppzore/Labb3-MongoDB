@@ -98,12 +98,13 @@ public class Player : LevelElement
         }
         else if (element is HealthPotion potion)
         {
+            var mongoDbService = new MongoDbService();
             Position = new Position(position.X, position.Y);
 
             RestoreHealth();
 
             element.Clear();
-            _mongoDbService!.DeleteElements(element.Id!);
+            mongoDbService!.DeleteElements(element.Id!);
             LevelData.Elements.Remove(element);
 
             return;

@@ -174,9 +174,15 @@ class GameLoop()
             var existingSnakes = LevelData.Elements.OfType<Labb3_MongoDB.Models.Snake>().ToList();
             Debug.WriteLine($"Snakes loaded: {existingSnakes.Count}");
 
-            //var existingWall = LevelData.Elements.AsQueryable().OfType<Wall>().Where(wall => wall.IsDiscovered);
-            //existingWall.Draw();   
-            
+            var discoveredWalls = LevelData.Elements.OfType<Wall>().Where(wall => wall.IsDiscovered).ToList();
+            Debug.WriteLine($"Number of discovered walls: {discoveredWalls.Count}");
+
+            foreach (var wall in discoveredWalls)
+            {
+                wall.Draw();
+            }
+
+
 
             //CreateExistingPlayer(existingElements);
 
@@ -197,12 +203,13 @@ class GameLoop()
             //CreateNewSnake();
             _player!.Turns = 0;
             _numberOfTurns = 0;
+            Console.Clear();
         }
 
         _totalEnemies = LevelData.Elements.OfType<Enemy>().ToList().Count;
         _deadEnemies = new();
 
-        Console.ResetColor(); Console.Clear();
+        Console.ResetColor(); //Console.Clear();
         Console.CursorVisible = false;
     }
 
