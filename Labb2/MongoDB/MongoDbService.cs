@@ -58,6 +58,41 @@ namespace Labb3_MongoDB.MongoDB
 
             }
         }
+        public List<LevelElement> GetElements()
+        {
+            try
+            {
+                var result = _elementCollection.Find(_ => true).ToList();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error retrieving elements: {ex.Message}");
+                throw;
+            }
+        }
+
+        public void DeleteElements(string elementId)
+        {
+            try
+            {
+                var deleteResult = _elementCollection.DeleteOne(e => e.Id == elementId);
+
+                if (deleteResult.DeletedCount > 0)
+                {
+                    Debug.WriteLine($"Successfully deleted element with Id: {elementId}");
+                }
+                else
+                {
+                    Debug.WriteLine($"No element found with Id: {elementId}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error deleting element: {ex.Message}");
+                throw;
+            }
+        }
 
         //public void SavePlayer(Player player)
         //{
@@ -122,19 +157,6 @@ namespace Labb3_MongoDB.MongoDB
         //    return await _playerCollection.Find(p => p.Id == playerId).FirstOrDefaultAsync();
         //}
 
-        public List<LevelElement> GetElements()
-        {
-            try
-            {
-                var result = _elementCollection.Find(_ => true).ToList();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error retrieving elements: {ex.Message}");
-                throw;
-            }
-        }
 
         //public Player? GetExistingPlayer()
         //{

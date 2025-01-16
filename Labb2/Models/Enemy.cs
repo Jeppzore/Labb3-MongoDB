@@ -1,6 +1,8 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using Labb3_MongoDB.MongoDB;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Labb3_MongoDB.Models;
+
 
 [BsonDiscriminator("Enemy")]
 public abstract class Enemy : LevelElement
@@ -45,6 +47,9 @@ public abstract class Enemy : LevelElement
         {
             Health = 0;
             IsDead = true;
+
+            var mongoDbService = new MongoDbService();
+            mongoDbService!.DeleteElements(Id!);
 
             player.AddExperience(Experience);
 

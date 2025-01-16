@@ -1,4 +1,6 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using Labb3_MongoDB.MongoDB;
+using MongoDB.Bson.Serialization.Attributes;
+using System.Xml.Linq;
 
 namespace Labb3_MongoDB.Models;
 
@@ -6,6 +8,8 @@ namespace Labb3_MongoDB.Models;
 [BsonDiscriminator("Player")]
 public class Player : LevelElement
 {
+    private readonly MongoDbService? _mongoDbService;
+
     public Dice? DefenceDice { get; set; }
     //public string? Id { get; set; }
     public int VisionRange { get; set; }
@@ -60,6 +64,8 @@ public class Player : LevelElement
         {
             Health = 0;
             IsAlive = false;
+            _mongoDbService!.DeleteElements(Id!);
+
         }
     }
 
@@ -97,6 +103,7 @@ public class Player : LevelElement
             RestoreHealth();
 
             element.Clear();
+            _mongoDbService!.DeleteElements(element.Id!);
             LevelData.Elements.Remove(element);
 
             return;

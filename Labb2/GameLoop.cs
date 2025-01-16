@@ -5,6 +5,7 @@ using Labb3_MongoDB.MongoDB.Entities;
 using MongoDB.Driver;
 using System.Diagnostics;
 using System.Numerics;
+using System.Xml.Linq;
 
 class GameLoop()
 {
@@ -79,6 +80,7 @@ class GameLoop()
 
         foreach (var enemy in _deadEnemies)
         {
+            //_mongoDbService!.DeleteElements(enemy.Id!);
             LevelData.Elements.Remove(enemy);
             enemy.Clear();
         }
