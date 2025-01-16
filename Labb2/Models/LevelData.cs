@@ -62,6 +62,7 @@ class LevelData
             if (distance <= visionRange)
             {
                 element.Draw();
+                element.IsDiscovered = true;
             }
         }
     }

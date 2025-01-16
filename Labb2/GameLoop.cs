@@ -63,6 +63,7 @@ class GameLoop()
         MovePlayer();
 
         _numberOfTurns++;
+        _player.Turns = _numberOfTurns;
     }
 
     private void RunEnemiesTurn()
