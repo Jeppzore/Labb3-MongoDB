@@ -28,35 +28,6 @@ namespace Labb3_MongoDB.MongoDB.Entities
             SaveProgressText();
         }
 
-        //public void SaveProgress(Player player)
-        //{
-        //    _mongoDbService!.SavePlayer(player);
-        //    SaveProgressText();
-        //}
-
-        //public void SaveProgress(Rat rat)
-        //{
-        //    _mongoDbService!.SaveRat(rat);
-        //    SaveProgressText();
-        //}
-
-        //public void SaveProgress(Snake snake)
-        //{
-        //    _mongoDbService!.SaveSnake(snake);
-        //    SaveProgressText();
-        //}
-
-        // TODO: Used only for multiple Player-saves. Delete later if not needed
-        //public async Task<Player> LoadProgress(string playerId)
-        //{
-        //    var player = await _mongoDbService!.LoadPlayer(playerId);
-        //    if (player != null)
-        //    {
-                
-        //    }
-        //    return player!;
-        //}
-
         public void LoadElements(List<LevelElement> element)
         {
             try
@@ -85,34 +56,6 @@ namespace Labb3_MongoDB.MongoDB.Entities
             Thread.Sleep(2000);
             Console.ResetColor();
             Console.Clear();
-        }
-
-        public void LoadRatData(Rat rat)
-        {
-            rat = new Rat
-            {
-                Id = rat.Id,
-                Name = rat.Name,
-                Health = rat.Health,
-                AttackPower = rat.AttackPower,
-                DefenseStrength = rat.DefenseStrength,
-                CurrentLocation = rat.CurrentLocation
-            };
-
-            Console.SetCursorPosition(0,20);
-            Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Loaded '{rat.Name}'");
-            Thread.Sleep(1000);
-
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine();
-            Console.WriteLine("Stats:");
-
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"Current Health: {rat.Health}\nAttack Power: {rat.AttackPower}\nDefense Strength: {rat.DefenseStrength}");
-            Thread.Sleep(2000);
-            Console.ResetColor();
         }
 
         private static void SaveProgressText()

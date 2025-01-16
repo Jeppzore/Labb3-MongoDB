@@ -212,7 +212,7 @@ class GameLoop()
         _totalEnemies = LevelData.Elements.OfType<Enemy>().ToList().Count;
         _deadEnemies = new();
 
-        Console.ResetColor(); //Console.Clear();
+        Console.ResetColor(); 
         Console.CursorVisible = false;
     }
 
@@ -229,49 +229,47 @@ class GameLoop()
         _player.SetName(name);
     }
 
-    private void CreateNewRat()
-    {
-        foreach (var element in LevelData.Elements.OfType<Labb3_MongoDB.Models.Rat>())
-        {
-            _rat = (Labb3_MongoDB.Models.Rat)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Rat)!;
-            Debug.WriteLine("Rat detected");
-        }
-    }
+    //private void CreateNewRat()
+    //{
+    //    foreach (var element in LevelData.Elements.OfType<Labb3_MongoDB.Models.Rat>())
+    //    {
+    //        _rat = (Labb3_MongoDB.Models.Rat)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Rat)!;
+    //        Debug.WriteLine("Rat detected");
+    //    }
+    //}
 
-    private void CreateExistingPlayer(Labb3_MongoDB.MongoDB.Entities.Player existingPlayer)
-    {
-        _player = (Labb3_MongoDB.Models.Player)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Player)!;
-        _player.Id = existingPlayer.Id!;
-        _player.SetName(existingPlayer.Name!);
-        _player.Health = existingPlayer.Health;
-        _player.MaxHealth = existingPlayer.MaxHealth;
-        _player.Level = existingPlayer.Level;
-        _player.Experience = existingPlayer.Experience;
-        _player.VisionRange = existingPlayer.VisionRange;
-        _player.AttackPower = existingPlayer.AttackPower;
-        _player.DefenseStrength = existingPlayer.DefenseStrength;
-        _player.Turns = existingPlayer.Turns;
-        _player.IsMongo = existingPlayer.IsMongo;
-        _player.Position = (Position)existingPlayer.CurrentLocation!;
-    }
+    //private void CreateExistingPlayer(Labb3_MongoDB.MongoDB.Entities.Player existingPlayer)
+    //{
+    //    _player = (Labb3_MongoDB.Models.Player)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Player)!;
+    //    _player.Id = existingPlayer.Id!;
+    //    _player.SetName(existingPlayer.Name!);
+    //    _player.Health = existingPlayer.Health;
+    //    _player.MaxHealth = existingPlayer.MaxHealth;
+    //    _player.Level = existingPlayer.Level;
+    //    _player.Experience = existingPlayer.Experience;
+    //    _player.VisionRange = existingPlayer.VisionRange;
+    //    _player.AttackPower = existingPlayer.AttackPower;
+    //    _player.DefenseStrength = existingPlayer.DefenseStrength;
+    //    _player.Turns = existingPlayer.Turns;
+    //    _player.IsMongo = existingPlayer.IsMongo;
+    //    _player.Position = (Position)existingPlayer.CurrentLocation!;
+    //}
 
-    private void CreateExistingRat(Labb3_MongoDB.MongoDB.Entities.Rat existingRat)
-    {
-        _rat = (Labb3_MongoDB.Models.Rat)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Rat)!;
-        _rat.Id = existingRat.Id!;
-        _rat.Name = existingRat.Name!;
-        _rat.Health = existingRat.Health;
-        _rat.AttackPower = existingRat.AttackPower;
-        _rat.DefenseStrength = existingRat.DefenseStrength;
-        _rat.IsMongo = existingRat.IsMongo;
-        _rat.Position = (Position)existingRat.CurrentLocation!;
-    }
+    //private void CreateExistingRat(Labb3_MongoDB.MongoDB.Entities.Rat existingRat)
+    //{
+    //    _rat = (Labb3_MongoDB.Models.Rat)LevelData.Elements.FirstOrDefault(x => x.Type == ElementType.Rat)!;
+    //    _rat.Id = existingRat.Id!;
+    //    _rat.Name = existingRat.Name!;
+    //    _rat.Health = existingRat.Health;
+    //    _rat.AttackPower = existingRat.AttackPower;
+    //    _rat.DefenseStrength = existingRat.DefenseStrength;
+    //    _rat.IsMongo = existingRat.IsMongo;
+    //    _rat.Position = (Position)existingRat.CurrentLocation!;
+    //}
 
     public void SaveAndExit()
     {
-        //SavePlayer();
-        //SaveRat();
-        //SaveSnake();
+       
         SaveElements();
 
         SaveGameText();
@@ -289,146 +287,146 @@ class GameLoop()
 
     }
 
-    private void SavePlayer()
-    {
-        // If there is no existing saved game - create a new one in MongoDB
-        if (_player!.IsMongo == false)
-        {
-            var mongoDbService = new MongoDbService();
-            var gameManager = new GameManager(mongoDbService);
+    //private void SavePlayer()
+    //{
+    //    // If there is no existing saved game - create a new one in MongoDB
+    //    if (_player!.IsMongo == false)
+    //    {
+    //        var mongoDbService = new MongoDbService();
+    //        var gameManager = new GameManager(mongoDbService);
 
-            var currentPlayer = new Labb3_MongoDB.MongoDB.Entities.Player
-            {
-                Id = Guid.NewGuid().ToString(), // Generates a new unique ID
-                Name = _player!.Name,
-                Health = _player.Health,
-                MaxHealth = _player.MaxHealth,
-                Level = _player.Level,
-                Experience = _player.Experience,
-                VisionRange = _player.VisionRange,
-                AttackPower = _player.AttackPower,
-                DefenseStrength = _player.DefenseStrength,
-                Turns = _numberOfTurns,
-                IsMongo = _player.IsMongo = true, // Mark as saved in MongoDB
-                CurrentLocation = _player.Position,
-                LastSaveTime = DateTime.UtcNow
-            };
+    //        var currentPlayer = new Labb3_MongoDB.MongoDB.Entities.Player
+    //        {
+    //            Id = Guid.NewGuid().ToString(), // Generates a new unique ID
+    //            Name = _player!.Name,
+    //            Health = _player.Health,
+    //            MaxHealth = _player.MaxHealth,
+    //            Level = _player.Level,
+    //            Experience = _player.Experience,
+    //            VisionRange = _player.VisionRange,
+    //            AttackPower = _player.AttackPower,
+    //            DefenseStrength = _player.DefenseStrength,
+    //            Turns = _numberOfTurns,
+    //            IsMongo = _player.IsMongo = true, // Mark as saved in MongoDB
+    //            CurrentLocation = _player.Position,
+    //            LastSaveTime = DateTime.UtcNow
+    //        };
 
-            //gameManager.SaveProgress(currentPlayer);
-            _players = currentPlayer;
-        }
+    //        //gameManager.SaveProgress(currentPlayer);
+    //        _players = currentPlayer;
+    //    }
         // Update existing saved game with the changed property values
-        else
-        {
-            var mongoDbService = new MongoDbService();
+    //    else
+    //    {
+    //        var mongoDbService = new MongoDbService();
 
-            var updatedPlayer = new Labb3_MongoDB.MongoDB.Entities.Player
-            {
-                Id = _player.Id, // Use the existing player's ID
-                Name = _player.Name,
-                Health = _player.Health,
-                MaxHealth = _player.MaxHealth,
-                Level = _player.Level,
-                Experience = _player.Experience,
-                VisionRange = _player.VisionRange,
-                AttackPower = _player.AttackPower,
-                DefenseStrength = _player.DefenseStrength,
-                Turns = _numberOfTurns,
-                IsMongo = true,
-                CurrentLocation = _player.Position,
-                LastSaveTime = DateTime.UtcNow
-            };
+    //        var updatedPlayer = new Labb3_MongoDB.MongoDB.Entities.Player
+    //        {
+    //            Id = _player.Id, // Use the existing player's ID
+    //            Name = _player.Name,
+    //            Health = _player.Health,
+    //            MaxHealth = _player.MaxHealth,
+    //            Level = _player.Level,
+    //            Experience = _player.Experience,
+    //            VisionRange = _player.VisionRange,
+    //            AttackPower = _player.AttackPower,
+    //            DefenseStrength = _player.DefenseStrength,
+    //            Turns = _numberOfTurns,
+    //            IsMongo = true,
+    //            CurrentLocation = _player.Position,
+    //            LastSaveTime = DateTime.UtcNow
+    //        };
 
-            //mongoDbService.SavePlayer(updatedPlayer);
+    //        //mongoDbService.SavePlayer(updatedPlayer);
 
-            //SaveGameText();
-            //Environment.Exit(0);
-        }
-    }
+    //        //SaveGameText();
+    //        //Environment.Exit(0);
+    //    }
+    //}
 
-    private void SaveRat()
-    {
-        // If there is no existing saved game - create a new one in MongoDB
-        if (_rat!.IsMongo == false)
-        {
-            var mongoDbService = new MongoDbService();
-            var gameManager = new GameManager(mongoDbService);
+    //private void SaveRat()
+    //{
+    //    // If there is no existing saved game - create a new one in MongoDB
+    //    if (_rat!.IsMongo == false)
+    //    {
+    //        var mongoDbService = new MongoDbService();
+    //        var gameManager = new GameManager(mongoDbService);
 
-            var currentRat = new Labb3_MongoDB.MongoDB.Entities.Rat
-            {
-                Id = Guid.NewGuid().ToString(), // Generates a new unique ID
-                Name = _rat!.Name,
-                Health = _rat.Health,
-                AttackPower = _rat.AttackPower,
-                DefenseStrength = _rat.DefenseStrength,
-                IsMongo = _rat.IsMongo = true, // Mark as saved in MongoDB
-                CurrentLocation = _rat.Position,
-            };
+    //        var currentRat = new Labb3_MongoDB.MongoDB.Entities.Rat
+    //        {
+    //            Id = Guid.NewGuid().ToString(), // Generates a new unique ID
+    //            Name = _rat!.Name,
+    //            Health = _rat.Health,
+    //            AttackPower = _rat.AttackPower,
+    //            DefenseStrength = _rat.DefenseStrength,
+    //            IsMongo = _rat.IsMongo = true, // Mark as saved in MongoDB
+    //            CurrentLocation = _rat.Position,
+    //        };
 
-            //gameManager.SaveProgress(currentRat);
-            _rats = currentRat;
-        }
-        // Update existing saved game with the changed property values
-        else
-        {
-            var mongoDbService = new MongoDbService();
+    //        //gameManager.SaveProgress(currentRat);
+    //        _rats = currentRat;
+    //    }
+    //    // Update existing saved game with the changed property values
+    //    else
+    //    {
+    //        var mongoDbService = new MongoDbService();
 
-            var updatedRat = new Labb3_MongoDB.MongoDB.Entities.Rat
-            {
-                Id = _rat.Id, // Use the existing rat's ID
-                Name = _rat!.Name,
-                Health = _rat.Health,
-                AttackPower = _rat.AttackPower,
-                DefenseStrength = _rat.DefenseStrength,
-                IsMongo = _rat.IsMongo = true, // Mark as saved in MongoDB
-                CurrentLocation = _rat.Position,
-            };
+    //        var updatedRat = new Labb3_MongoDB.MongoDB.Entities.Rat
+    //        {
+    //            Id = _rat.Id, // Use the existing rat's ID
+    //            Name = _rat!.Name,
+    //            Health = _rat.Health,
+    //            AttackPower = _rat.AttackPower,
+    //            DefenseStrength = _rat.DefenseStrength,
+    //            IsMongo = _rat.IsMongo = true, // Mark as saved in MongoDB
+    //            CurrentLocation = _rat.Position,
+    //        };
 
-            //mongoDbService.SaveRat(updatedRat);
-        }
-    }
+    //        //mongoDbService.SaveRat(updatedRat);
+    //    }
+    //}
 
-    private void SaveSnake()
-    {
-        // If there is no existing saved game - create a new one in MongoDB
-        if (_snake!.IsMongo == false)
-        {
-            var mongoDbService = new MongoDbService();
-            var gameManager = new GameManager(mongoDbService);
+    //private void SaveSnake()
+    //{
+    //    // If there is no existing saved game - create a new one in MongoDB
+    //    if (_snake!.IsMongo == false)
+    //    {
+    //        var mongoDbService = new MongoDbService();
+    //        var gameManager = new GameManager(mongoDbService);
 
-            var currentSnake = new Labb3_MongoDB.MongoDB.Entities.Snake
-            {
-                Id = Guid.NewGuid().ToString(), // Generates a new unique ID
-                Name = _snake!.Name,
-                Health = _snake.Health,
-                AttackPower = _snake.AttackPower,
-                DefenseStrength = _snake.DefenseStrength,
-                IsMongo = _snake.IsMongo = true, // Mark as saved in MongoDB
-                CurrentLocation = _snake.Position,
-            };
+    //        var currentSnake = new Labb3_MongoDB.MongoDB.Entities.Snake
+    //        {
+    //            Id = Guid.NewGuid().ToString(), // Generates a new unique ID
+    //            Name = _snake!.Name,
+    //            Health = _snake.Health,
+    //            AttackPower = _snake.AttackPower,
+    //            DefenseStrength = _snake.DefenseStrength,
+    //            IsMongo = _snake.IsMongo = true, // Mark as saved in MongoDB
+    //            CurrentLocation = _snake.Position,
+    //        };
 
-            //gameManager.SaveProgress(currentSnake);
-            _snakes = currentSnake;
-        }
-        // Update existing saved game with the changed property values
-        else
-        {
-            var mongoDbService = new MongoDbService();
+    //        //gameManager.SaveProgress(currentSnake);
+    //        _snakes = currentSnake;
+    //    }
+    //    // Update existing saved game with the changed property values
+    //    else
+    //    {
+    //        var mongoDbService = new MongoDbService();
 
-            var updatedSnake = new Labb3_MongoDB.MongoDB.Entities.Snake
-            {
-                Id = _snake.Id, // Use the existing snake's ID
-                Name = _snake!.Name,
-                Health = _snake.Health,
-                AttackPower = _snake.AttackPower,
-                DefenseStrength = _snake.DefenseStrength,
-                IsMongo = _snake.IsMongo = true, // Mark as saved in MongoDB
-                CurrentLocation = _snake.Position,
-            };
+    //        var updatedSnake = new Labb3_MongoDB.MongoDB.Entities.Snake
+    //        {
+    //            Id = _snake.Id, // Use the existing snake's ID
+    //            Name = _snake!.Name,
+    //            Health = _snake.Health,
+    //            AttackPower = _snake.AttackPower,
+    //            DefenseStrength = _snake.DefenseStrength,
+    //            IsMongo = _snake.IsMongo = true, // Mark as saved in MongoDB
+    //            CurrentLocation = _snake.Position,
+    //        };
 
-            //mongoDbService.SaveSnake(updatedSnake);
-        }
-    }
+    //        //mongoDbService.SaveSnake(updatedSnake);
+    //    }
+    //}
 
     public void SaveGameText()
     {
