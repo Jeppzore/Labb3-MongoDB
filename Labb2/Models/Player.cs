@@ -60,8 +60,6 @@ public class Player : LevelElement
         {
             Health = 0;
             IsAlive = false;
-            _mongoDbService!.DeleteElements(Id!);
-
         }
     }
 

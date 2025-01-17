@@ -11,7 +11,7 @@ public class Snake : Enemy
     {
         Health = 20;
         Name = "snake";
-        AttackPower = 3;
+        AttackPower = 10;
         DefenseStrength = 8;
     }
 

@@ -1,16 +1,14 @@
 ﻿using Labb3_MongoDB;
 using Labb3_MongoDB.Models;
 using Labb3_MongoDB.MongoDB;
-using Labb3_MongoDB.MongoDB.Entities;
 using MongoDB.Driver;
 using System.Diagnostics;
 
 class GameLoop()
 {
     private readonly MongoDbService? _mongoDbService;
-    private readonly GameManager? _gameManager;
 
-    private Labb3_MongoDB.Models.Player? _player;
+    private Player? _player;
 
     public int _numberOfTurns = 0;
     public int _totalEnemies = 0;
@@ -28,7 +26,7 @@ class GameLoop()
             RunEnemiesTurn();
         }
 
-        RestartGame();
+        GameOver();
     }
 
     private void RunPlayerTurn()
@@ -128,20 +126,30 @@ class GameLoop()
         }
     }
 
-    private void RestartGame()
+    private void GameOver()
     {
         Console.Clear();
         Console.SetCursorPosition(0, 0);
-        Console.WriteLine("Game over! Restarting game...");
-        Thread.Sleep(3000);
-        Console.Clear();
-        Start();
+        Console.WriteLine("Game over! Do you want to restart from your last save? Type 'yes' or 'no'");
+
+        var result = Console.ReadLine()!.ToLower();
+
+        if (result == "yes")
+        {
+            Console.Clear();
+            Start();
+        }
+        else
+        {
+            var mongoDbService = new MongoDbService();
+            mongoDbService!.DeleteCollection();
+            Environment.Exit(0);
+        }
     }
 
     private void Setup()
     {
         var mongoDbService = new MongoDbService();
-        var gameManager = new GameManager(mongoDbService);
 
         Console.SetWindowSize(120, 35);
         Console.ForegroundColor = ConsoleColor.Yellow;
@@ -156,9 +164,9 @@ class GameLoop()
             Console.WriteLine("Existing Save file found. Loading...");
             Thread.Sleep(2000);
 
-            gameManager.LoadElements(existingElements);
+            LoadElements(existingElements);
 
-            _player = LevelData.Elements.OfType<Labb3_MongoDB.Models.Player>().FirstOrDefault(x => x.Type == ElementType.Player);
+            _player = LevelData.Elements.OfType<Player>().FirstOrDefault(x => x.Type == ElementType.Player);
             _numberOfTurns = _player!.Turns;
 
             var discoveredWalls = LevelData.Elements.OfType<Wall>().Where(wall => wall.IsDiscovered).ToList();
@@ -206,13 +214,12 @@ class GameLoop()
 
     private void SaveElements()
     {
-        var mongoDbService = new MongoDbService();
-        var gameManager = new GameManager(mongoDbService);
-
+        var _mongoDbService = new MongoDbService();
         var currentElements = LevelData.Elements.ToList();
 
-        gameManager.SaveProgress(currentElements);
+        _mongoDbService!.SaveElements(currentElements);
 
+        SaveProgressText();
     }
 
     public void SaveGameText()
@@ -221,5 +228,43 @@ class GameLoop()
         Console.SetCursorPosition(0, 28);
         Console.WriteLine($"Successfully saved game at turn: {_numberOfTurns}".PadRight(Console.BufferWidth));
         Console.ResetColor();
+    }
+
+    private static void SaveProgressText()
+    {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.SetCursorPosition(0, 27);
+        Console.WriteLine($"Saving game...".PadRight(Console.BufferWidth));
+        Console.ResetColor();
+    }
+
+    public void LoadElements(List<LevelElement> element)
+    {
+        try
+        {
+            // Clear the current in-memory elements and populate with saved data
+            LevelData._elements.Clear();
+            LevelData._elements.AddRange(element);
+
+            // Log or debug to verify loading
+            Debug.WriteLine($"Loaded {element.Count} elements from the database.");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error loading elements: {ex.Message}");
+            throw;
+        }
+
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"Loading save file...");
+        Thread.Sleep(1000);
+
+
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine($"Finalizing...");
+        Thread.Sleep(2000);
+        Console.ResetColor();
+        Console.Clear();
     }
 }
