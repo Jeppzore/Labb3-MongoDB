@@ -117,6 +117,8 @@ class GameLoop()
 
             case ConsoleKey.Escape: // ESC
                 Console.Clear();
+                var mongoDbService = new MongoDbService();
+                mongoDbService.DeleteCollection();
                 Start();
                 break;
 
