@@ -12,7 +12,6 @@ namespace Labb3_MongoDB.MongoDB
 
         public MongoDbService()
         {
-
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddUserSecrets<MongoDbService>();
@@ -20,10 +19,11 @@ namespace Labb3_MongoDB.MongoDB
             var configuration = builder.Build();
 
             string connectionString = configuration["ConnectionString"];
-            string databaseName = configuration["DatabaseName"];
+            string databaseName = "Jesper&Robin";
 
             var client = new MongoClient(connectionString);
             var database = client.GetDatabase(databaseName);
+
             _elementCollection = database.GetCollection<LevelElement>("Elements");
             _database = client.GetDatabase(databaseName);
         }
