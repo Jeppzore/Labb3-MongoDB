@@ -6,8 +6,6 @@ class LevelData
 
     public static List<LevelElement> Elements { get { return _elements; } }
 
-    public Player? Player { get; set; }
-
     public static void Load(string fileName)
     {
         _elements = [];

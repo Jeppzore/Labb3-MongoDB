@@ -6,9 +6,6 @@ namespace Labb3_MongoDB.Models;
 [BsonDiscriminator("Rat")]
 public class Rat : Enemy
 {
-    public bool IsMongo { get; set; } = false;
-    //public string ?Id { get; set; }
-
     public Rat(Position position) :
         base(position, icon: 'r', ConsoleColor.Red, ElementType.Rat, experience: 5)
     {
