@@ -12,4 +12,7 @@ Change "your_Server_Name" with your chosen server in MongoDB.
 Run the project in Visual Studio.
 See the following picture if you're unsure where to find "Manage User Secrets" image
 
+![image](https://github.com/user-attachments/assets/ab7668d7-0e24-48a2-aea0-764fd328b470)
+
+
 User Secrets Guide: https://dontpaniclabs.com/blog/post/2023/03/02/how-to-set-up-user-secrets-for-net-core-projects-in-visual-studio/
